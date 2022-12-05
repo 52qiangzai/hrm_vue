@@ -26,3 +26,38 @@ export const nowDateInfo = (date) => {
   }
   return `${year}${month}`;
 };
+
+
+// 路由格式化
+export const setDiyRoute = (menuList) => {
+  const menuRes = [];
+  menuList.forEach((menu) => {
+    const route = {
+      name: menu.code,
+      path: menu.path,
+      component: () => import("../views/" + menu.code),
+      children: [],
+      meta: {
+        title: menu.name,
+        icon: menu.icon,
+      },
+    };
+    // 判断是否有子菜单
+    if (menu.children.length > 0) {
+      menu.children.forEach((subMenu) => {
+        route.children.push({
+          name: subMenu.code,
+          path: subMenu.path,
+          component: () => import("../views/" + menu.code + "/" + subMenu.code),
+          children: [],
+          meta: {
+            title: menu.name,
+            icon: menu.icon,
+          },
+        });
+      });
+    }
+    menuRes.push(route);
+  });
+  return menuRes;
+};

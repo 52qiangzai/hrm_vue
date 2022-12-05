@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard-container" v-loading="isLoading">
     <el-row class="home" :gutter="20">
-      <el-col :span="8" style="margin-top: 20px">
+      <el-col :span="8" :xs="24" style="margin-top: 20px">
         <!-- 个人资料 -->
         <el-card shadow="hover">
           <div class="user">
@@ -50,7 +50,7 @@
         </el-card>
       </el-col>
 
-      <el-col :span="16" style="margin-top: 20px">
+      <el-col :span="16" :xs="24" style="margin-top: 20px">
         <div class="num">
           <el-card
             v-for="(item, index) in countData"
@@ -75,7 +75,7 @@
           <el-card style="height: 300px">
             <div style="height: 300px" ref="staff"></div>
           </el-card>
-          <!--  -->
+
           <el-card style="height: 300px">
             <div style="height: 300px" ref="department"></div>
           </el-card>
@@ -290,6 +290,12 @@ export default {
   },
   mounted() {
     this.initData();
+    window.onresize = () => {
+      // echarts.init().resize()
+      this.echartsChange(this.$refs.staff);
+      this.echartsChange(this.$refs.city);
+      this.echartsChange(this.$refs.department);
+    };
   },
   watch: {
     "attendanceData.date": {
@@ -327,7 +333,6 @@ export default {
             return item;
           });
           this.eInitialization(this.$refs.staff, this.staffOption);
-          //  echarts.init(this.$refs.staff).setOption(this.staffOption);
         }
       } catch (error) {
         console.log(error);
@@ -379,6 +384,10 @@ export default {
     // 图表初始化
     eInitialization(dom, data) {
       echarts.init(dom).setOption(data);
+    },
+    // 图表随屏幕变化
+    echartsChange(dom) {
+      echarts.init(dom).resize();
     },
     initData() {
       Promise.all([

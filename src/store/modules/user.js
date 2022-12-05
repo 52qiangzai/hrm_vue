@@ -18,12 +18,6 @@ const mutations = {
   SET_TOKEN: (state, token) => {
     state.token = token;
   },
-  // SET_NAME: (state, name) => {
-  //   state.name = name;
-  // },
-  SET_AVATAR: (state, avatar) => {
-    state.avatar = avatar;
-  },
   SET_USER_INFO: (state, userInfo) => {
     setStorage("userInfo", userInfo);
     state.userInfo = userInfo;
@@ -51,23 +45,6 @@ const actions = {
   // get user info
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
-      // getInfo(state.token)
-      //   .then((response) => {
-      //     const { data } = response;
-
-      //     if (!data) {
-      //       return reject("Verification failed, please Login again.");
-      //     }
-
-      //     const { name, avatar } = data;
-
-      //     commit("SET_NAME", name);
-      //     commit("SET_AVATAR", avatar);
-      //     resolve(data);
-      //   })
-      //   .catch((error) => {
-      //     reject(error);
-      //   });
       if (getStorage("userInfo")) {
         commit("SET_USER_INFO", getStorage("userInfo"));
         resolve("success");
