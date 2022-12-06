@@ -20,3 +20,7 @@
 封装组件CommonForm
 
 ![](https://static.q6q.cc/hrm/day03.png)
+
+完成个人中心信息修改，头像，资料等
+
+![](https://static.q6q.cc/hrm/day0302.png)

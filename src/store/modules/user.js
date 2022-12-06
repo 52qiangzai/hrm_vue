@@ -1,7 +1,7 @@
 import { loginUser } from "@/api/user";
 import { getToken, setToken, removeToken } from "@/utils/auth";
 import { resetRouter } from "@/router";
-import { setStorage, getStorage,removeStorage } from "@/utils/storage";
+import { setStorage, getStorage, removeStorage } from "@/utils/storage";
 const getDefaultState = () => {
   return {
     token: getToken(),
@@ -43,9 +43,12 @@ const actions = {
   },
 
   // get user info
-  getInfo({ commit, state }) {
+  getInfo({ commit }, data) {
     return new Promise((resolve, reject) => {
       if (getStorage("userInfo")) {
+        if (data && data !== getStorage("userInfo")) {
+          setStorage("userInfo", data);
+        }
         commit("SET_USER_INFO", getStorage("userInfo"));
         resolve("success");
       } else {
@@ -55,11 +58,11 @@ const actions = {
   },
 
   // 退出登录
-  logout({ commit, state }) {
+  logout({ commit }) {
     return new Promise((resolve, reject) => {
       removeToken(); // must remove  token  first
       resetRouter();
-      removeStorage('userInfo')
+      removeStorage("userInfo");
       commit("RESET_STATE");
       resolve();
     });

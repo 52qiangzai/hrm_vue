@@ -21,6 +21,10 @@
           <router-link to="/">
             <el-dropdown-item> Home </el-dropdown-item>
           </router-link>
+          <el-dropdown-item @click.native="InfoForm.isShow = true"
+            >个人中心</el-dropdown-item
+          >
+          <el-dropdown-item>修改密码</el-dropdown-item>
           <!-- <a target="_blank" href="https://github.com/PanJiaChen/vue-admin-template/">
             <el-dropdown-item>Github</el-dropdown-item>
           </a>
@@ -33,21 +37,102 @@
         </el-dropdown-menu>
       </el-dropdown>
     </div>
+    <!-- 个人信息 -->
+    <el-dialog title="个人信息" :visible.sync="InfoForm.isShow" fullscreen>
+      <CommonForm
+        :formItemList="InfoForm.formItemList"
+        :formData="InfoForm.formData"
+        :inline="InfoForm.inline"
+      ></CommonForm>
+
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="InfoForm.isShow = false">取消</el-button>
+        <el-button type="primary" @click="confirmInfo">确定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import { reqUploadFile } from "@/api/upload";
+import { reqUpdateStaffInfo } from "@/api/user";
 import { mapGetters } from "vuex";
 import Breadcrumb from "@/components/Breadcrumb";
+import CommonForm from "@/components/CommonForm";
 import Hamburger from "@/components/Hamburger";
 
 export default {
   components: {
     Breadcrumb,
     Hamburger,
+    CommonForm,
+  },
+  data() {
+    return {
+      InfoForm: {
+        isShow: false,
+        formData: JSON.parse(localStorage.getItem("userInfo")),
+        formItemList: [
+          {
+            name: "avatar",
+            label: "头像",
+            type: "upload",
+            uploadUrl: reqUploadFile(),
+          },
+          {
+            name: "name",
+            label: "姓名",
+            type: "input",
+          },
+          {
+            name: "gender",
+            label: "性别",
+            type: "select",
+            optionList: [
+              {
+                name: "男",
+                id: 0,
+              },
+              {
+                name: "女",
+                id: 1,
+              },
+            ],
+          },
+          {
+            name: "birthday",
+            label: "生日",
+            type: "date",
+          },
+          {
+            name: "phone",
+            label: "电话",
+            type: "input",
+          },
+          {
+            name: "address",
+            label: "地址",
+            type: "input",
+          },
+          {
+            name: "remark",
+            label: "备注",
+            type: "textarea",
+          },
+        ],
+      },
+    };
+  },
+  mounted() {
+    this.$bus.$on("uploadSuccess", (docs) => {
+      this.InfoForm.formData.avatar = docs.name;
+    });
+  },
+  beforeDestroy() {
+    this.$bus.$off("uploadSuccess");
   },
   computed: {
-    ...mapGetters(["sidebar", "userInfo"]),
+    ...mapGetters(["sidebar", "userInfo", "token"]),
   },
   methods: {
     toggleSideBar() {
@@ -55,8 +140,20 @@ export default {
     },
     async logout() {
       await this.$store.dispatch("user/logout");
-      this.$message.success('退出成功')
+      this.$message.success("退出成功");
       this.$router.push(`/login?redirect=${this.$route.fullPath}`);
+    },
+    async confirmInfo() {
+      try {
+        let res = await reqUpdateStaffInfo(this.InfoForm.formData);
+        if (res.code === 200) {
+          this.$message.success(res.message);
+          this.$store.dispatch("user/getInfo", this.InfoForm.formData);
+          this.InfoForm.isShow = false;
+        }
+      } catch (error) {
+        console.log("错误");
+      }
     },
   },
 };

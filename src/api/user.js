@@ -11,3 +11,8 @@ export const loginUser = ({ username, password }) => {
     },
   });
 };
+
+//修改staff信息
+export const reqUpdateStaffInfo = (info) => {
+  return request.put("/staff", info);
+};
