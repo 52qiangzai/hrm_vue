@@ -16,3 +16,13 @@ export const loginUser = ({ username, password }) => {
 export const reqUpdateStaffInfo = (info) => {
   return request.put("/staff", info);
 };
+
+// 更新密码
+export const reqUpdatePassword = (data) => {
+  return request.put("/staff/pwd", data);
+};
+
+// 检查密码正确
+export const reqCheckPassword = (pwd, id) => {
+  return request.get(`/staff/check/${pwd}/${id}`)
+}

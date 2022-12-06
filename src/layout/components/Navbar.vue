@@ -24,7 +24,9 @@
           <el-dropdown-item @click.native="InfoForm.isShow = true"
             >个人中心</el-dropdown-item
           >
-          <el-dropdown-item>修改密码</el-dropdown-item>
+          <el-dropdown-item @click.native="pwdForm.isShow = true"
+            >修改密码</el-dropdown-item
+          >
           <!-- <a target="_blank" href="https://github.com/PanJiaChen/vue-admin-template/">
             <el-dropdown-item>Github</el-dropdown-item>
           </a>
@@ -50,12 +52,31 @@
         <el-button type="primary" @click="confirmInfo">确定</el-button>
       </div>
     </el-dialog>
+    <!-- 密码修改 -->
+    <el-dialog title="修改密码" :visible.sync="pwdForm.isShow" width="80%">
+      <CommonForm
+        ref="pwdForm"
+        :formItemList="pwdForm.formItemList"
+        :formData="pwdForm.formData"
+        :inline="pwdForm.inline"
+        :rules="pwdForm.rules"
+      ></CommonForm>
+
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="pwdForm.isShow = false">取消</el-button>
+        <el-button type="primary" @click="confirmPwd">确定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { reqUploadFile } from "@/api/upload";
-import { reqUpdateStaffInfo } from "@/api/user";
+import {
+  reqUpdateStaffInfo,
+  reqUpdatePassword,
+  reqCheckPassword,
+} from "@/api/user";
 import { mapGetters } from "vuex";
 import Breadcrumb from "@/components/Breadcrumb";
 import CommonForm from "@/components/CommonForm";
@@ -68,6 +89,52 @@ export default {
     CommonForm,
   },
   data() {
+    // 检查密码是否正确
+    let checkPwd = async (rule, value, callback) => {
+      try {
+        let res = await reqCheckPassword(value, this.userInfo.id);
+        if (res.code === 200) {
+          callback();
+        } else {
+          callback(new Error("密码输入错误！"));
+        }
+      } catch (error) {
+        callback(new Error("验证出错"));
+      }
+    };
+    let checkNewPwd = (rule, value, callback) => {
+      if (value === this.pwdForm.formData.password) {
+        callback(new Error("不能使用近期的密码！"));
+      } else {
+        callback();
+      }
+    };
+    // 检查密码是否一致
+    let checkConfirmPwd = (rule, value, callback) => {
+      if (value !== this.pwdForm.formData.newPassword) {
+        callback(new Error("两次输入密码不一致!"));
+      } else {
+        callback();
+      }
+    };
+    let checkDays = (rule, value, callback) => {
+      let leaveType = this.leaveForm.leaveTypeList.find(
+        (item) => item.typeId === this.leaveForm.formData.typeId
+      );
+      if (value > leaveType.days) {
+        callback(
+          new Error(
+            "部门规定，" +
+              leaveType.name +
+              "休假天数不超过" +
+              leaveType.days +
+              "天!"
+          )
+        );
+      } else {
+        callback();
+      }
+    };
     return {
       InfoForm: {
         isShow: false,
@@ -121,6 +188,45 @@ export default {
           },
         ],
       },
+      pwdForm: {
+        isShow: false,
+        inline: false,
+        formData: {},
+        formItemList: [
+          {
+            name: "password",
+            label: "原密码",
+            type: "password",
+          },
+          {
+            name: "newPassword",
+            label: "新密码",
+            type: "password",
+          },
+          {
+            name: "confirmPassword",
+            label: "确认密码",
+            type: "password",
+          },
+        ],
+        rules: {
+          password: [
+            { required: true, message: "请输入原密码", trigger: "blur" },
+            { min: 3, max: 10, message: "长度在3到10个字符", trigger: "blur" },
+            { validator: checkPwd, trigger: "blur" },
+          ],
+          newPassword: [
+            { required: true, message: "请输入新密码", trigger: "blur" },
+            { min: 3, max: 10, message: "长度在3到10个字符", trigger: "blur" },
+            { validator: checkNewPwd, trigger: "blur" },
+          ],
+          confirmPassword: [
+            { required: true, message: "请输入确认密码", trigger: "blur" },
+            { min: 3, max: 10, message: "长度在3到10个字符", trigger: "blur" },
+            { validator: checkConfirmPwd, trigger: "blur" },
+          ],
+        },
+      },
     };
   },
   mounted() {
@@ -154,6 +260,30 @@ export default {
       } catch (error) {
         console.log("错误");
       }
+    },
+    confirmPwd() {
+      this.$refs.pwdForm.$refs.form.validate(async (valid) => {
+        if (valid) {
+          try {
+            let res = await reqUpdatePassword({
+              id: this.userInfo.id,
+              password: this.pwdForm.formData.newPassword,
+            });
+            if (res.code === 200) {
+              this.$message.success("密码修改成功，请重新登录！");
+              this.$store.dispatch("user/logout");
+              this.$router.push({ name: "login" });
+            } else {
+              this.$message.error("密码修改失败！");
+            }
+          } catch (error) {
+            console.log(error);
+          }
+          this.pwdForm.isShow = false;
+        } else {
+          return false;
+        }
+      });
     },
   },
 };
