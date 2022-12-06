@@ -30,3 +30,23 @@ export const reqAllCity = () => {
 export const reqCityDetailById = (cityId) => {
   return request.get(`/city/${cityId}`);
 };
+
+// 获取参保城市列表
+export const reqCityList = (current, size) => {
+  return request.get("/city", {
+    params: {
+      current,
+      size,
+    },
+  });
+};
+
+// 修改参保城市信息
+export const reqUpdateCity = (data) => {
+  return request.put("/city", data);
+};
+
+// 删除参保城市信息
+export const reqDeleteCity = (id)=>{
+  return request.delete(`/id/${id}`)
+}

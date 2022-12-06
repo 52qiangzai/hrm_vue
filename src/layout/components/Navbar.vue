@@ -117,24 +117,6 @@ export default {
         callback();
       }
     };
-    let checkDays = (rule, value, callback) => {
-      let leaveType = this.leaveForm.leaveTypeList.find(
-        (item) => item.typeId === this.leaveForm.formData.typeId
-      );
-      if (value > leaveType.days) {
-        callback(
-          new Error(
-            "部门规定，" +
-              leaveType.name +
-              "休假天数不超过" +
-              leaveType.days +
-              "天!"
-          )
-        );
-      } else {
-        callback();
-      }
-    };
     return {
       InfoForm: {
         isShow: false,

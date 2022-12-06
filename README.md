@@ -25,4 +25,9 @@
 ![](https://static.q6q.cc/hrm/day0302.png)
 
 完成个人密码的更改，老密码校验，新密码更改等
+
 ![](https://static.q6q.cc/hrm/day0303.png)
+
+完成部分薪资管理中的参保功能
+![](https://static.q6q.cc/hrm/day0304.png)
+
