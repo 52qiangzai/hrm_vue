@@ -111,28 +111,25 @@ export const constantRoutes = [
   {
     name: "system",
     path: "/system",
-    component:Layout,
+    component: Layout,
     children: [
       {
         name: "docs",
         path: "docs",
         meta: { title: "文件管理", icon: "s-management-1" },
         component: () => import("@/views/system/docs"),
-
       },
       {
         name: "staff",
         path: "staff",
         meta: { title: "员工管理", icon: "s-management-2" },
         component: () => import("@/views/system/staff"),
-
       },
       {
         name: "department",
         path: "department",
         meta: { title: "部门管理", icon: "s-management-3" },
         component: () => import("@/views/system/department"),
-
       },
     ],
     meta: { title: "系统管理", icon: "s-management" },
@@ -140,7 +137,7 @@ export const constantRoutes = [
   {
     name: "attendance",
     path: "/attendance",
-    component:Layout,
+    component: Layout,
     children: [
       {
         name: "leave",
