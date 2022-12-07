@@ -54,7 +54,7 @@
             icon="el-icon-info"
             icon-color="red"
             title="你确定删除吗？"
-            @confirm="del(scope.row)"
+            @onConfirm="deleteHandle(scope.row)"
           >
             <el-button size="mini" type="danger" slot="reference"
               >删除 <i class="el-icon-remove-outline"></i
@@ -94,7 +94,7 @@ export default {
     handleCurrentChange(current) {
       this.$bus.$emit("currentChange", current);
     },
-    del(row) {
+    deleteHandle(row) {
       this.$bus.$emit("del", row);
     },
     edit(row) {

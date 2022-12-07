@@ -31,3 +31,12 @@
 完成部分薪资管理中的参保功能
 ![](https://static.q6q.cc/hrm/day0304.png)
 
+### day04
+
+完成薪资管理中的参保功能
+
+```
+记录：Popconfirm组件中的确定事件，根据版本的不同，分为onConfirm和confirm
+```
+
+![](https://static.q6q.cc/hrm/day04.png)

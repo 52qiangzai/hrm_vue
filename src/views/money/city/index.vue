@@ -1,6 +1,29 @@
 <template>
   <div class="app-container">
-    我是参保城市
+    <el-alert
+      title="参保城市"
+      type="success"
+      description="参保地指的办理社保的地方，而社保一般指社会保险，是指一种为丧失劳动能力、暂时失去劳动岗位或因健康原因造成损失的人口提供收入或补偿的一种社会和经济制度。该计划由政府举办，强制某一群体将其收入的一部分作为社会保险税（费）形成社会保险基金，在满足一定条件的情况下，被保险人可从基金获得固定的收入或损失的补偿，它是一种再分配制度，它的目标是保证物质及劳动力的再生产和社会的稳定。需要注意的是，参保地不一定是户籍所在地。参保地可以是非户籍地的其他地方。"
+    >
+    </el-alert>
+    <div style="margin: 10px 0">
+      <el-button type="primary" @click="handleAdd" size="mini"
+        >新增 <i class="el-icon-circle-plus-outline"></i>
+      </el-button>
+      <el-popconfirm
+        style="margin-left: 10px"
+        confirm-button-text="确定"
+        cancel-button-text="我再想想"
+        icon="el-icon-info"
+        icon-color="red"
+        title="你确定删除吗？"
+        @onConfirm="handleDeleteBatch"
+      >
+        <el-button type="danger" size="mini" slot="reference"
+          >批量删除 <i class="el-icon-remove-outline"></i>
+        </el-button>
+      </el-popconfirm>
+    </div>
     <!-- 表格显示组件 -->
     <CommonTable
       :tableData="table.tableData"
@@ -30,7 +53,13 @@
   </div>
 </template>
 <script>
-import { reqCityList, reqUpdateCity, reqDeleteCity } from "@/api/money";
+import {
+  reqCityList,
+  reqUpdateCity,
+  reqDeleteCity,
+  reqAddCity,
+  reqBatchCity,
+} from "@/api/money";
 import CommonTable from "@/components/CommonTable";
 import CommonForm from "@/components/CommonForm";
 export default {
@@ -46,7 +75,7 @@ export default {
     };
     return {
       dialogForm: {
-        type: "add", // add为新增，edit为编辑
+        type: "edit", // add为新增，edit为编辑
         isShow: false,
         inline: false,
         formItemList: [
@@ -358,14 +387,21 @@ export default {
         this.table.pageConfig.size
       );
     });
-    this.$bus.$on("del", (row) => {
-      console.log(row);
-    });
+
     this.$bus.$on("edit", (row) => {
       this.dialogForm.isShow = true;
       this.$nextTick(() => {
         this.dialogForm.formData = JSON.parse(JSON.stringify(row));
       });
+    });
+
+    this.$bus.$on("del", (row) => {
+      this.delCity(row.id);
+    });
+
+    this.$bus.$on("selectionChange", (data) => {
+      const result = data.map((item) => item.id);
+      this.table.ids = result;
     });
   },
   methods: {
@@ -383,27 +419,69 @@ export default {
       }
     },
     // 确定更新或新增
-    async confirm() {
+    confirm() {
+      this.$refs.dialogForm.$refs.form.validate(async (valid) => {
+        if (valid) {
+          try {
+            let res;
+            if (this.dialogForm.type === "edit") {
+              res = await reqUpdateCity(this.dialogForm.formData);
+            } else {
+              res = await reqAddCity(this.dialogForm.formData);
+            }
+            if (res.code === 200) {
+              this.$message.success(res.message);
+              this.getCityList(
+                this.table.pageConfig.current,
+                this.table.pageConfig.size
+              );
+              this.dialogForm.isShow = false;
+            }
+          } catch (error) {
+            console.log(error);
+          }
+        } else {
+          return false;
+        }
+      });
+    },
+    // 删除信息
+    async delCity(id) {
       try {
-        let res = await reqUpdateCity(this.dialogForm.formData);
+        let res = await reqDeleteCity(id);
         if (res.code === 200) {
           this.$message.success(res.message);
           this.getCityList(
             this.table.pageConfig.current,
             this.table.pageConfig.size
           );
-          this.dialogForm.isShow = false;
         }
       } catch (error) {
         console.log(error);
       }
     },
-    // 删除信息
-    async delCity(id) {
+    // 新增信息
+    handleAdd() {
+      this.dialogForm.type = "add";
+      this.dialogForm.isShow = true;
+      this.dialogForm.formData = {};
+    },
+    // 批量删除
+    async handleDeleteBatch() {
+      console.log("我响应了");
+      if (!this.table.ids.length) return;
       try {
-        let res = await reqDeleteCity(id);
-        console.log(res);
-      } catch (error) {}
+        let res = await reqBatchCity(this.table.ids.toString());
+        if (res.code === 200) {
+          this.$message.success(res.message);
+          this.getCityList(
+            this.table.pageConfig.current,
+            this.table.pageConfig.size
+          );
+        }
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
   beforeDestroy() {
@@ -411,6 +489,7 @@ export default {
     this.$bus.$off("currentChange");
     this.$bus.$off("edit");
     this.$bus.$off("del");
+    this.$bus.$off("selectionChange");
   },
 };
 </script>

@@ -1,5 +1,10 @@
 <template>
   <div class="app-container">
+     <el-alert style="margin:0 0 10px 0;"
+    title="五险一金"
+    type="success"
+    description="五险一金是指用人单位给予劳动者的几种保障性待遇的合称，包括基本养老保险、基本医疗保险、失业保险、工伤保险和生育保险，及住房公积金。在职职工个人应当按照规定缴存住房公积金。”住房公积金为“应当缴纳”项目，法律上应当即为必须，同时缴纳也表现出这是一项义务。">
+  </el-alert>
     <CommonForm
       :formItemList="searchForm.formItemList"
       :formData="searchForm.formData"

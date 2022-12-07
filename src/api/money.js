@@ -17,6 +17,7 @@ export const reqInsuranceDetailById = (id) => {
   return request(`/insurance/${id}`);
 };
 
+// 更新五险一金
 export const reqSetInsurance = (data) => {
   return request.post("/insurance/set", data);
 };
@@ -47,6 +48,14 @@ export const reqUpdateCity = (data) => {
 };
 
 // 删除参保城市信息
-export const reqDeleteCity = (id)=>{
-  return request.delete(`/id/${id}`)
-}
+export const reqDeleteCity = (id) => {
+  return request.delete(`/city/${id}`);
+};
+
+export const reqAddCity = (data) => {
+  return request.post("/city", data);
+};
+
+export const reqBatchCity = (strId) => {
+  return request.delete(`/city/batch/${strId}`);
+};
