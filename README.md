@@ -40,3 +40,7 @@
 ```
 
 ![](https://static.q6q.cc/hrm/day04.png)
+
+完成薪资管理里的工资管理，优化表格组件
+
+![](https://static.q6q.cc/hrm/day0401.png)
