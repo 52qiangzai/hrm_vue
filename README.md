@@ -54,3 +54,9 @@
 完成角色分配问题
 
 ![](https://static.q6q.cc/hrm/day0502.png)
+
+完成系统管理里的文件管理，对文件增辖改查及下载
+
+![](https://static.q6q.cc/hrm/day0503.png)
+
+![](https://static.q6q.cc/hrm/day0504.png)
