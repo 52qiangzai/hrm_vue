@@ -64,3 +64,7 @@
 完成考勤管理的请假审批功能
 
 ![](https://static.q6q.cc/hrm/day0505.png)
+
+完成考勤管理的考勤表现功能
+
+![](https://static.q6q.cc/hrm/day0506.png)

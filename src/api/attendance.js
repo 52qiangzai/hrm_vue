@@ -19,3 +19,22 @@ export const reqEditLeaveDetail = (data) => {
     data,
   });
 };
+
+// 获取人员考勤表现
+export const reqAttendanceList = (current, size, ...args) => {
+  const [name, month] = args;
+  return request({
+    url: "/attendance",
+    method: "get",
+    params: {
+      current,
+      size,
+      name,
+      month,
+    },
+  });
+};
+
+export const reqUpdateStaffAttendance = (data) => {
+  return request.put("/attendance/set", data);
+};
