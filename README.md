@@ -60,3 +60,7 @@
 ![](https://static.q6q.cc/hrm/day0503.png)
 
 ![](https://static.q6q.cc/hrm/day0504.png)
+
+完成考勤管理的请假审批功能
+
+![](https://static.q6q.cc/hrm/day0505.png)

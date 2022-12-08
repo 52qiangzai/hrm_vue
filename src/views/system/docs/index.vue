@@ -277,7 +277,7 @@ export default {
       const a = document.createElement("a");
       a.setAttribute("style", "display:none;");
       a.setAttribute("href", reqDownloadApi() + data.name);
-      a.click();
+      a.click()
     },
   },
   beforeDestroy() {
