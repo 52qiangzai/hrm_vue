@@ -44,3 +44,13 @@
 完成薪资管理里的工资管理，优化表格组件
 
 ![](https://static.q6q.cc/hrm/day0401.png)
+
+### day05
+
+完成权限管理里的角色管理增删改查
+
+![](https://static.q6q.cc/hrm/day0501.png)
+
+完成角色分配问题
+
+![](https://static.q6q.cc/hrm/day0502.png)
