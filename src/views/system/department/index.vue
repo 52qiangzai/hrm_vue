@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="app-container">
     我是department
   </div>
 </template>

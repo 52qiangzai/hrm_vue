@@ -13,7 +13,7 @@
       :formData="searchForm.formData"
       :inline="searchForm.inline"
     >
-      <el-button type="primary" @click="search" size="mini"
+      <el-button type="primary" @click="getStaffInfo" size="mini"
         >搜索 <i class="el-icon-search"
       /></el-button>
       <el-button type="danger" @click="reset" size="mini"
@@ -421,13 +421,18 @@ export default {
         console.log(error);
       }
     },
-    search() {
-      this.getStaffInfo();
-    },
     reset() {
       this.searchForm.formData = {};
       this.getStaffInfo();
     },
   },
+  beforeDestroy(){
+    this.$bus.$off("sizeChange")
+    this.$bus.$off("currentChange")
+    this.$bus.$off("edit")
+    this.$bus.$off("statusChange")
+    this.$bus.$off("del")
+    this.$bus.$off("selectionChange")
+  }
 };
 </script>
