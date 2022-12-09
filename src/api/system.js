@@ -26,3 +26,26 @@ export const reqDeleteFileInfo = (id) => {
 export const reqBatchDeleteFileInfo = (idStr) => {
   return request.delete(`/docs/batch/${idStr}`);
 };
+
+// 获取员工信息
+export const reqStaffInfo = (current, size, data) => {
+  return request({
+    url: "/staff/page",
+    method: "post",
+    params: {
+      current,
+      size,
+    },
+    data,
+  });
+};
+
+// 获取所有部门信息
+export const reqAllDept = () => {
+  return request.get("/dept/all");
+};
+
+// 获取所以角色信息
+export const reqAllRole = () => {
+  return request.get("/role/all");
+};

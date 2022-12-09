@@ -68,3 +68,9 @@
 完成考勤管理的考勤表现功能
 
 ![](https://static.q6q.cc/hrm/day0506.png)
+
+完成系统设置得员工管理，对员工信息得增删改查，权限角色得分配
+
+![](https://static.q6q.cc/hrm/day0601.png)
+
+![](https://static.q6q.cc/hrm/day0602.png)
