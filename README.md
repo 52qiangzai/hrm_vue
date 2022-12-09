@@ -1,4 +1,4 @@
-毕业设计，基于 springboot 的新世纪人力资源管理系统，前端项目，基于 vue2 全家桶
+毕业设计，基于 springboot 的新世纪人力资源管理系统，前端项目，基于 合成vue2 ,vuex,vue-router全家桶一体的vue_element_template，完成时间：2022/12/09
 
 ### day01
 
@@ -76,3 +76,13 @@
 ![](https://static.q6q.cc/hrm/day0601.png)
 
 ![](https://static.q6q.cc/hrm/day0602.png)
+
+完成系统管理得部门管理，对部门人员信息得增删查改
+
+![](https://static.q6q.cc/hrm/day0603.png)
+
+完成对部门人员的出勤设置以及请假设置
+
+![](https://static.q6q.cc/hrm/day0604.png)
+
+![](https://static.q6q.cc/hrm/day0605.png)
