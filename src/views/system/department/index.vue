@@ -490,6 +490,7 @@ export default {
         }
       } catch (error) {}
     },
+    // 搜索
     async search() {
       try {
         let res = await reqDeptList(
@@ -506,6 +507,7 @@ export default {
         console.log(error);
       }
     },
+    //重置
     reset() {
       this.searchForm.formData = {};
       this.getDeptList();
