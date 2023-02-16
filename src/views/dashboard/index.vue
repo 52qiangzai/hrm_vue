@@ -392,7 +392,11 @@ export default {
     },
     // 图表随屏幕变化
     echartsChange(dom) {
-      echarts.init(dom).resize();
+      let myChart = echarts.getInstanceByDom(dom);
+      if (myChart == null) {
+        myChart = echarts.init(dom);
+      }
+      myChart.resize();
     },
     initData() {
       Promise.all([
