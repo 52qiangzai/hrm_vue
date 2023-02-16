@@ -383,7 +383,12 @@ export default {
     },
     // 图表初始化
     eInitialization(dom, data) {
-      echarts.init(dom).setOption(data);
+      // 检测是否已经存在echarts实例，如果不存在，则不再去初始化
+      let myChart = echarts.getInstanceByDom(dom);
+      if (myChart == null) {
+        myChart = echarts.init(dom);
+      }
+      myChart.setOption(data);
     },
     // 图表随屏幕变化
     echartsChange(dom) {
