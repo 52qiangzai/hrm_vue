@@ -29,6 +29,50 @@ import Layout from "@/layout";
  * a base page that does not have permission requirements
  * all roles can be accessed
  */
+
+// 路由格式化
+
+export function myRoutes(routes) {
+  // 添加添加菜单到dynamicRoute的children中
+  const newRoute = [];
+  routes.forEach((menu) => {
+    const route = {
+      name: menu.name,
+      path: menu.path,
+      component: Layout,
+
+      children: [],
+      meta: {
+        title: menu.name,
+        icon: menu.icon,
+      },
+    };
+
+    // 判断是否有子菜单
+    if (menu.children.length > 0) {
+      menu.children.forEach((subMenu) => {
+        if (subMenu.id === 4) return;
+        route.children.push({
+          name: subMenu.name,
+          path: subMenu.code,
+          component: (resolve) =>
+            require([
+              "@/views/" + menu.code + "/" + subMenu.code + "/index",
+            ], resolve),
+          children: [],
+          meta: {
+            title: subMenu.name,
+            icon: subMenu.icon,
+          },
+        });
+      });
+    }
+    newRoute.push(route);
+  });
+  return newRoute;
+}
+
+// 静态路由
 export const constantRoutes = [
   {
     path: "/login",
@@ -63,99 +107,99 @@ export const constantRoutes = [
     ],
   },
 
-  {
-    name: "money",
-    path: "/money",
-    component: Layout,
-    children: [
-      {
-        name: "insurance",
-        path: "insurance",
-        meta: { title: "五险一金", icon: "s-finance-1" },
-        component: () => import("@/views/money/insurance"),
-      },
-      {
-        name: "city",
-        path: "city",
-        meta: { title: "参保城市", icon: "s-finance-2" },
-        component: () => import("@/views/money/city"),
-      },
-      {
-        name: "salary",
-        path: "salary",
-        meta: { title: "工资管理", icon: "s-finance-3" },
-        component: () => import("@/views/money/salary"),
-      },
-    ],
-    meta: { title: "薪资管理", icon: "s-finance" },
-  },
-  {
-    name: "permission",
-    path: "/permission",
-    component: Layout,
-    children: [
-      {
-        name: "role",
-        path: "role",
-        meta: { title: "权限管理", icon: "s-cooperation" },
-        component: () => import("@/views/permission/role"),
-      },
-    ],
-  },
-  {
-    name: "system",
-    path: "/system",
-    component: Layout,
-    children: [
-      {
-        name: "docs",
-        path: "docs",
-        meta: { title: "文件管理", icon: "s-management-1" },
-        component: () => import("@/views/system/docs"),
-      },
-      {
-        name: "staff",
-        path: "staff",
-        meta: { title: "员工管理", icon: "s-management-2" },
-        component: () => import("@/views/system/staff"),
-      },
-      {
-        name: "department",
-        path: "department",
-        meta: { title: "部门管理", icon: "s-management-3" },
-        component: () => import("@/views/system/department"),
-      },
-    ],
-    meta: { title: "系统管理", icon: "s-management" },
-  },
-  {
-    name: "attendance",
-    path: "/attendance",
-    component: Layout,
-    children: [
-      {
-        name: "leave",
-        path: "leave",
-        meta: { title: "请假审批", icon: "edit-2" },
-        component: () => import("@/views/attendance/leave"),
-      },
-      {
-        name: "performance",
-        path: "performance",
-        meta: { title: "考勤表现", icon: "edit-1" },
-        component: () => import("@/views/attendance/performance"),
-      },
-    ],
-    meta: { title: "考勤管理", icon: "edit" },
-  },
+  // {
+  //   name: "money",
+  //   path: "/money",
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       name: "insurance",
+  //       path: "insurance",
+  //       meta: { title: "五险一金", icon: "s-data" },
+  //       component: () => import("@/views/money/insurance"),
+  //     },
+  //     {
+  //       name: "city",
+  //       path: "city",
+  //       meta: { title: "参保城市", icon: "data-line" },
+  //       component: () => import("@/views/money/city"),
+  //     },
+  //     {
+  //       name: "salary",
+  //       path: "salary",
+  //       meta: { title: "工资管理", icon: "coordinate" },
+  //       component: () => import("@/views/money/salary"),
+  //     },
+  //   ],
+  //   meta: { title: "薪资管理", icon: "s-finance" },
+  // },
+  // {
+  //   name: "permission",
+  //   path: "/permission",
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       name: "role",
+  //       path: "role",
+  //       meta: { title: "权限管理", icon: "s-cooperation" },
+  //       component: () => import("@/views/permission/role"),
+  //     },
+  //   ],
+  // },
+  // {
+  //   name: "system",
+  //   path: "/system",
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       name: "docs",
+  //       path: "docs",
+  //       meta: { title: "文件管理", icon: "folder" },
+  //       component: () => import("@/views/system/docs"),
+  //     },
+  //     {
+  //       name: "staff",
+  //       path: "staff",
+  //       meta: { title: "员工管理", icon: "user" },
+  //       component: () => import("@/views/system/staff"),
+  //     },
+  //     {
+  //       name: "department",
+  //       path: "department",
+  //       meta: { title: "部门管理", icon: "s-operation" },
+  //       component: () => import("@/views/system/department"),
+  //     },
+  //   ],
+  //   meta: { title: "系统管理", icon: "s-management" },
+  // },
+  // {
+  //   name: "attendance",
+  //   path: "/attendance",
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       name: "leave",
+  //       path: "leave",
+  //       meta: { title: "请假审批", icon: "suitcase" },
+  //       component: () => import("@/views/attendance/leave"),
+  //     },
+  //     {
+  //       name: "performance",
+  //       path: "performance",
+  //       meta: { title: "考勤表现", icon: "suitcase" },
+  //       component: () => import("@/views/attendance/performance"),
+  //     },
+  //   ],
+  //   meta: { title: "考勤管理", icon: "edit" },
+  // },
 
   // 404 page must be placed at the end !!!
-  { path: "*", redirect: "/404", hidden: true },
+  // { path: "*", redirect: "/404", hidden: true },
 ];
 
 const createRouter = () =>
   new Router({
-    mode: 'history', // require service support
+    mode: "history", // require service support
     scrollBehavior: () => ({ y: 0 }),
     routes: constantRoutes,
   });

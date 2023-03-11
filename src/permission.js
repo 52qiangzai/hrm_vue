@@ -5,6 +5,7 @@ import NProgress from "nprogress"; // progress bar
 import "nprogress/nprogress.css"; // progress bar style
 import { getToken } from "@/utils/auth"; // get token from cookie
 import getPageTitle from "@/utils/get-page-title";
+import { getStorage } from "./utils/storage";
 NProgress.configure({ showSpinner: false }); // NProgress Configuration
 
 const whiteList = ["/login"]; // no redirect whitelist
@@ -20,24 +21,19 @@ router.beforeEach(async (to, from, next) => {
   const hasToken = getToken();
 
   if (hasToken) {
-    if (!Object.keys(store.getters.userInfo).length) {
-      let res = await store.dispatch("user/getInfo");
-      if (res === "success") {
-        next();
-      } else {
-        await store.dispatch("user/resetToken");
-        Message.error(error || "Has Error");
-        next(`/login?redirect=${to.path}`);
-        NProgress.done();
-      }
-    }
-  
     if (to.path === "/login") {
       // if is logged in, redirect to the home page
       next({ path: "/" });
       NProgress.done();
     } else {
+      if (!Object.keys(store.getters.userInfo).length) {
+        store.dispatch("user/getInfo");
+      }
+      if (!store.getters.menuList.length) {
+        store.dispatch("menu/getMenuList", store.getters.userInfo.id);
+      }
       next();
+      // next({ ...to, replace: true });
     }
   } else {
     /* has no token*/
@@ -56,4 +52,5 @@ router.beforeEach(async (to, from, next) => {
 router.afterEach(() => {
   // finish progress bar
   NProgress.done();
+  console.clear()
 });

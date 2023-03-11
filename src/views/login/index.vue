@@ -67,7 +67,7 @@
 
 <script>
 import { validUsername } from "@/utils/validate";
-
+import settings from "@/settings";
 export default {
   name: "Login",
   data() {
@@ -128,10 +128,14 @@ export default {
           this.loading = true;
           this.$store
             .dispatch("user/login", this.loginForm)
-            .then(() => {
-              this.$router.push({ path: this.redirect || "/" });
-              this.loading = false;
+            .then(async (res) => {
+              await this.$store.dispatch(
+                "menu/getMenuList",
+                res.id
+              );
               this.$message.success("登录成功");
+              this.loading = false;
+              this.$router.push({ path: this.redirect || "/" });
             })
             .catch(() => {
               this.loading = false;
