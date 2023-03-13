@@ -226,6 +226,7 @@ import {
   reqAllLeaveType,
   reqLeaveDetail,
   reqLeaveInfo,
+  reqUpdateWorkTime,
 } from "@/api/system";
 import CommonTable from "@/components/CommonTable";
 import CommonForm from "@/components/CommonForm";
@@ -554,8 +555,15 @@ export default {
     },
     // 发送请假请求
     async saveSetting() {
+      let res;
       try {
-        let res = await reqLeaveInfo(this.settingDialog.leaveForm.formData);
+        if (this.settingDialog.activeTabName === "workTime") {
+          res = await reqUpdateWorkTime(
+            this.settingDialog.workTimeForm.formData
+          );
+        } else {
+          res = await reqLeaveInfo(this.settingDialog.leaveForm.formData);
+        }
         if (res.code === 200) {
           this.$message.success(res.message);
           this.settingDialog.isShow = false;
